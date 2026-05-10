@@ -1,0 +1,169 @@
+from datetime import datetime
+
+personagens = []
+personagemequipado = None
+
+class novopersonagem:
+    def __init__(self,nome):
+        self.vida = 100
+        self.nome = nome
+        self.stamina = 100
+        self.dam = 10
+        self.inventory = []
+        self.id = 0
+        self.tempo = datetime.now()
+        self.data = self.tempo.strftime("%d %b %Y, %H:%M")
+
+    def __str__(self):
+        return f"Personagem: {self.nome} | Vida: {self.vida} | Stamina: {self.stamina} | Inventory: {self.inventory} | ID: {self.id} | DataDeCriação: {self.tempo}"
+    
+    def __repr__(self):
+        return self.__str__()
+
+def criarpersonagem():
+    nome = input("Digite Seu Nome: ")
+    while any(p.nome == nome for p in personagens):
+        print("Esse Nome Ja Existe!")
+        nome = input("Digite Seu Nome: ")
+    novo = novopersonagem(nome)
+    novo.id = len(personagens) + 1
+    personagens.append(novo)
+    print(f"Novo Personagem Criado: {novo}")
+
+def selecionarpersonagem():
+        global personagemequipado
+        esc = input("Digite O Nome Do Personagem Que Deseja Escolher: ")
+        resultado = list(filter(lambda p: p.nome == esc, personagens))
+        if resultado:
+             personagemequipado = resultado[0]
+             print(f"Voce Selecionou o Personagem {personagemequipado.nome}")
+        else:
+            print("Personagem Não Encontrado!")
+
+def entrarnojogo():
+    if personagemequipado == None:
+        print("Precisa Equipar Um Personagem Antes De Entrar")
+    else:
+        main2()
+
+def atacaroutroper():
+    global personagemequipado
+    alvo = input("Digite O Alvo: ")
+    resultado = list(filter(lambda p: p.nome == alvo, personagens))
+    if resultado:
+        alvo = resultado[0]
+        alvo.vida -= personagemequipado.dam
+        print(f"Deu {personagemequipado.dam} de Dano ao Personagem: {alvo.nome}")
+    else:
+        print("Personagem Não Encontrado!")
+
+def curar():
+    global personagemequipado
+    try:
+        cura = float(input("Digite O Quanto De Cura Deseja:"))
+        if cura > 0:
+            personagemequipado.vida += cura
+            print(f"Voce Curou {cura} de Vida!")
+        else:
+            print("Não Pode Curar Menos Que 0 De Vida!")
+    except ValueError:
+        print("O Valor A Ser Curado Precisa Ser Um Número!")
+
+def inventarioitens():
+    global personagemequipado
+    while True:
+        print("Deseja Adicionar Ou Remover Um Item?")
+        print("1 - Para Adicionar")
+        print("2 - Para Remover")
+        print("3 - Sair")
+        try:
+            esco = int(input("Digite a Opçao Desejada:"))
+            if esco == 1:
+                item = input("Digite O Item á Ser Adicionado Ao Inventario: ")
+                personagemequipado.inventory.append(item)
+                print(f"{item} Adicionado No Seu Inventario Com Sucesso!")
+            elif esco == 2:
+                item = input("Digite O Item á Ser Retirado Do Seu Inventario: ")
+                for i in personagemequipado.inventory:
+                    if i == item:
+                        personagemequipado.inventory.remove(item)
+                        print(f"{item} Removido No Seu Inventario Com Sucesso!")
+                    else:
+                        print("Item Não Encontrado!")
+            elif esco == 3:
+                break
+            else:
+                print("Opçao Inválida!")
+        except ValueError:
+            print("Digite Apenas Números")
+                
+def status():
+    print("---Status---")
+    print(personagemequipado)          
+
+
+def main2():
+    global personagemequipado
+    while True:
+        print("\n--- Jogo ---")
+        print("1 - Atacar Outro Personagem")
+        print("2 - Curar Personagem")
+        print("3 - Receber/Retirar Item")
+        print("4 - Verificar Status")
+        print("5 - Desequipar Personagem")
+        
+        try:
+            escolha = int(input("Escolha uma opção: "))
+            
+            if escolha == 1:
+                atacaroutroper()
+            elif escolha == 2:
+                curar()
+            elif escolha == 3:
+                inventarioitens()
+            elif escolha == 4:
+                status()
+            elif escolha == 5:
+                personagemequipado = None
+                break
+            else:
+                print("Opção inválida! Escolha 1, 2 ou 3.")
+                
+        except ValueError:
+            print("Erro: Digite apenas números inteiros!")
+
+def main():
+    global personagemequipado
+    while True:
+        print("\n--- Menu ---")
+        if personagemequipado == None:
+            print("Nenhum Personagem Equipado.")
+        else:
+            print(f"Personagem Equipado: {personagemequipado.nome}")
+        print("1 - Criar Personagem")
+        print("2 - Equipar Personagem")
+        print("3 - Entrar No Jogo")
+        print("4 - Sair")
+        
+        try:
+            escolha = int(input("Escolha uma opção: "))
+            
+            if escolha == 1:
+                criarpersonagem()
+            elif escolha == 2:
+                selecionarpersonagem()
+            elif escolha == 3:
+                entrarnojogo()
+            elif escolha == 4:
+                break
+            elif escolha == 1337:
+                print(personagens)
+            else:
+                print("Opção inválida! Escolha 1, 2, 3 ou 4.")
+                
+        except ValueError:
+            print("Erro: Digite apenas números inteiros!")
+
+
+if __name__ == "__main__":
+    main()
