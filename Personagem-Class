@@ -54,8 +54,14 @@ def atacaroutroper():
     resultado = list(filter(lambda p: p.nome == alvo, personagens))
     if resultado:
         alvo = resultado[0]
-        alvo.vida -= personagemequipado.dam
-        print(f"Deu {personagemequipado.dam} de Dano ao Personagem: {alvo.nome}")
+        if alvo.nome != personagemequipado.nome:
+            if alvo.vida >= 1:
+                alvo.vida -= personagemequipado.dam
+                print(f"Deu {personagemequipado.dam} de Dano ao Personagem: {alvo.nome}")
+            else:
+                print("Personagem Já Esta Derrotado! (0 de Vida)")
+        else:
+            print("Não Pode Se Auto Atacar!")
     else:
         print("Personagem Não Encontrado!")
 
@@ -69,7 +75,7 @@ def curar():
         else:
             print("Não Pode Curar Menos Que 0 De Vida!")
     except ValueError:
-        print("O Valor A Ser Curado Precisa Ser Um Número!")
+        print("Erro! O Valor A Ser Curado Precisa Ser Um Número!")
 
 def inventarioitens():
     global personagemequipado
@@ -86,18 +92,17 @@ def inventarioitens():
                 print(f"{item} Adicionado No Seu Inventario Com Sucesso!")
             elif esco == 2:
                 item = input("Digite O Item á Ser Retirado Do Seu Inventario: ")
-                for i in personagemequipado.inventory:
-                    if i == item:
+                if item in personagemequipado.inventory:
                         personagemequipado.inventory.remove(item)
                         print(f"{item} Removido No Seu Inventario Com Sucesso!")
-                    else:
-                        print("Item Não Encontrado!")
+                else:
+                    print("Item Não Encontrado!")
             elif esco == 3:
                 break
             else:
                 print("Opçao Inválida!")
         except ValueError:
-            print("Digite Apenas Números")
+            print("Erro! Digite Apenas Números")
                 
 def status():
     print("---Status---")
@@ -132,7 +137,7 @@ def main2():
                 print("Opção inválida! Escolha 1, 2 ou 3.")
                 
         except ValueError:
-            print("Erro: Digite apenas números inteiros!")
+            print("Erro! Digite apenas números inteiros!")
 
 def main():
     global personagemequipado
@@ -164,8 +169,7 @@ def main():
                 print("Opção inválida! Escolha 1, 2, 3 ou 4.")
                 
         except ValueError:
-            print("Erro: Digite apenas números inteiros!")
-
+            print("Erro! Digite apenas números inteiros!")
 
 if __name__ == "__main__":
     main()
