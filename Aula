@@ -1,0 +1,77 @@
+class User:
+    def __init__(self, name):
+        self.name = name
+        self.saldo = 1500
+        self.inventario = {}
+
+    def __str__(self):
+        return f"User(name={self.name}, saldo={self.saldo})"
+    def __repr__(self):
+        return self.__str__()
+
+class Item:
+    def __init__(self, name, price,stock):
+        self.name = name
+        self.price = price
+        self.stock = stock
+    def __str__(self):
+        return f"Item: {self.name} | Preço: {self.price} | Stock: {self.stock}"
+
+    def __repr__(self):
+        return self.__str__()
+class Loja:
+    def __init__(self):
+        self.items = {}
+    def __str__(self):
+        return f"{self.items}"
+
+    def __repr__(self):
+        return self.__str__()
+
+    def restock(self):
+        item = input("Nome do item: ")
+        preco = int(input("Preço do item: "))
+        quantidade = int(input("Quantidade em estoque: "))
+        new_item = Item(item, preco, quantidade)
+        self.items[item] = new_item
+        print(f"Item {item} adicionado com sucesso!")
+
+    def comprar(self):
+        qual = input("O Que Deseja Comprar?").lower()
+        if self.items[qual]:
+            if self.items[qual].stock > 0:
+                if User1.saldo >= self.items[qual].price:
+                    User1.saldo -= self.items[qual].price
+                    User1.inventario[qual] = User1.inventario.get(qual, 0) + 1
+                    self.items[qual].stock -= 1
+                    print(f"Compra de {qual} realizada com sucesso!")
+                else:
+                    print("Saldo insuficiente para comprar este item.")
+            else:
+                print("Desculpe, este item está fora de estoque.")
+        else:
+            print("Item não encontrado na loja.")
+           
+
+
+
+User1 = User("João")
+loja = Loja()
+
+def main():
+    while True:
+        print("\n≽(•⩊ •マ≼ SISTEMA DE LOJA ≽(•⩊ •マ≼")
+        print("1 - Cadastrar item")
+        print("2 - Comprar item")
+        print("3 - Status")
+        opcao = int(input("Digite sua opção: "))
+        if opcao == 1:
+            loja.restock()
+        elif opcao == 2:
+            loja.comprar()
+        elif opcao == 3:
+            print(User1)
+            print(loja.items)
+           
+if __name__ == "__main__":
+    main()
